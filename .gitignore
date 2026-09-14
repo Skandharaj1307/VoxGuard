@@ -1,0 +1,30 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Environment variables and secrets
+.env
+
+# Generated metadata
+data/metadata.csv
+
+# Raw datasets
+data/raw/
+
+# Model files
+*.pt
+*.pth
+*.onnx
+*.pkl
+
+# Logs
+*.log
+
+# IDE files
+.vscode/
+.idea/
