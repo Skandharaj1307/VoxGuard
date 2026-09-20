@@ -6,7 +6,7 @@ import csv
 # Configuration
 # --------------------------------------------------
 
-DATASET_ROOT = Path(r"E:\404NotFound\VoxGuard\data\raw")
+DATASET_ROOT = Path("data/raw")
 OUTPUT_FILE = Path("data/metadata.csv")
 
 
@@ -141,9 +141,14 @@ def process_protocol(
                 else "spoof"
             )
 
+            try:
+                rel_filepath = audio_path.resolve().relative_to(Path.cwd().resolve()).as_posix()
+            except ValueError:
+                rel_filepath = audio_path.as_posix()
+
             metadata_rows.append(
                 {
-                    "filepath": str(audio_path.resolve()),
+                    "filepath": rel_filepath,
                     "dataset": dataset_name,
                     "speaker_id": speaker_id,
                     "attack_id": attack_id,
