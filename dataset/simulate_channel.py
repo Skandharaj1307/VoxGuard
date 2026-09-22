@@ -43,20 +43,33 @@ def check_ffmpeg():
 
 
 def degrade_file_ffmpeg(ffmpeg_bin: str, input_path: str, output_path: str, codec: str = "pcm_mulaw"):
-    """Resamples audio to 8kHz mono and encodes with G.711 mu-law via ffmpeg."""
-    cmd = [
-        ffmpeg_bin, "-y", "-loglevel", "error",
-        "-i", input_path,
-        "-ar", "8000",
-        "-ac", "1",
-        "-c:a", codec,
-        output_path
-    ]
-    subprocess.run(cmd, check=True)
+    """Resamples audio to 8kHz mono and encodes with G.711 mu-law via ffmpeg, then relabels sample rate to 16kHz for AASIST timing."""
+    temp_8k = f"{output_path}.8k.wav"
+    try:
+        cmd_degrade = [
+            ffmpeg_bin, "-y", "-loglevel", "error",
+            "-i", input_path,
+            "-ar", "8000",
+            "-ac", "1",
+            "-c:a", codec,
+            temp_8k
+        ]
+        subprocess.run(cmd_degrade, check=True)
+
+        cmd_16k = [
+            ffmpeg_bin, "-y", "-loglevel", "error",
+            "-i", temp_8k,
+            "-ar", "16000",
+            output_path
+        ]
+        subprocess.run(cmd_16k, check=True)
+    finally:
+        if os.path.exists(temp_8k):
+            os.remove(temp_8k)
 
 
 def degrade_file_soundfile(input_path: str, output_path: str):
-    """Fallback: Resamples to 8kHz mono and encodes with G.711 mu-law via soundfile + scipy."""
+    """Fallback: Resamples to 8kHz mono G.711 mu-law, then upsamples to 16kHz for AASIST timing."""
     data, sr = sf.read(input_path)
     
     # Convert stereo to mono if necessary
@@ -70,8 +83,11 @@ def degrade_file_soundfile(input_path: str, output_path: str):
         down = sr // gcd
         data = signal.resample_poly(data, up, down)
 
-    # Write as G.711 mu-law WAV
-    sf.write(output_path, data, 8000, subtype='ULAW')
+    # Resample/interpolate to 16000 Hz so AASIST reads timing correctly
+    data_16k = signal.resample_poly(data, 2, 1)
+
+    # Write as 16kHz WAV
+    sf.write(output_path, data_16k, 16000)
 
 
 def process_channel_degradation(
