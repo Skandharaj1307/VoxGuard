@@ -575,33 +575,16 @@ class AIVoiceDetector:
 
 
         # ----------------------------------------------------
-        # Convert logits to probabilities
+        # Convert logits to calibrated probability P(spoof)
         # ----------------------------------------------------
 
-        probs = torch.softmax(
-            logits,
-            dim=-1
-        )
+        logit_spoof = logits[0, self.spoof_index]
+        logit_bonafide = logits[0, 1 - self.spoof_index]
+        margin = logit_spoof - logit_bonafide
 
-
-        # ----------------------------------------------------
-        # Get spoof probability
-        # ----------------------------------------------------
-
-        # IMPORTANT:
-        #
-        # Do NOT hardcode:
-        #
-        # probs[0, 1]
-        #
-        # Instead use the spoof index stored in the checkpoint.
-
-        spoof_prob = float(
-            probs[
-                0,
-                self.spoof_index
-            ].item()
-        )
+        # Calibrated sigmoid scaling centered on AASIST logit margin
+        calibrated_prob = float(torch.sigmoid((margin - (-2.0)) / 1.5).item())
+        spoof_prob = float(np.clip(calibrated_prob, 0.0, 1.0))
 
 
         # ----------------------------------------------------

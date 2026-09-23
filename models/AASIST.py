@@ -10,38 +10,42 @@ import torch.nn.functional as F
 
 
 def conv2d_via_conv1d(conv2d_layer: nn.Conv2d, input_tensor: torch.Tensor) -> torch.Tensor:
-    """Computes Conv2d via slice-wise Conv1d to prevent multi-gigabyte im2col memory allocation on large sequence widths."""
-    B, C_in, H, W = input_tensor.shape
-    C_out = conv2d_layer.out_channels
-    kh, kw = conv2d_layer.kernel_size
-    ph, pw = conv2d_layer.padding
-    sh, sw = conv2d_layer.stride
+    """Computes Conv2d natively to prevent memory allocation fragmentation on CPU."""
+    try:
+        return conv2d_layer(input_tensor)
+    except RuntimeError:
+        # Sliced fallback if contiguous allocation is constrained
+        B, C_in, H, W = input_tensor.shape
+        C_out = conv2d_layer.out_channels
+        kh, kw = conv2d_layer.kernel_size
+        ph, pw = conv2d_layer.padding
+        sh, sw = conv2d_layer.stride
 
-    if ph > 0 or pw > 0:
-        input_tensor = F.pad(input_tensor, (pw, pw, ph, ph))
+        if ph > 0 or pw > 0:
+            input_tensor = F.pad(input_tensor, (pw, pw, ph, ph))
 
-    padded_H = input_tensor.shape[2]
-    weight = conv2d_layer.weight
-    bias = conv2d_layer.bias
+        padded_H = input_tensor.shape[2]
+        weight = conv2d_layer.weight
+        bias = conv2d_layer.bias
 
-    out_H = (padded_H - kh) // sh + 1
-    row_outputs = []
-    for h in range(out_H):
-        h_start = h * sh
-        row_out = None
-        for k in range(kh):
-            x_slice = input_tensor[:, :, h_start + k, :]
-            w_slice = weight[:, :, k, :]
-            c1d = F.conv1d(x_slice, w_slice, stride=sw)
-            if row_out is None:
-                row_out = c1d
-            else:
-                row_out = row_out + c1d
-        if bias is not None:
-            row_out = row_out + bias.view(1, C_out, 1)
-        row_outputs.append(row_out.unsqueeze(2))
+        out_H = (padded_H - kh) // sh + 1
+        row_outputs = []
+        for h in range(out_H):
+            h_start = h * sh
+            row_out = None
+            for k in range(kh):
+                x_slice = input_tensor[:, :, h_start + k, :]
+                w_slice = weight[:, :, k, :]
+                c1d = F.conv1d(x_slice, w_slice, stride=sw)
+                if row_out is None:
+                    row_out = c1d
+                else:
+                    row_out = row_out + c1d
+            if bias is not None:
+                row_out = row_out + bias.view(1, C_out, 1)
+            row_outputs.append(row_out.unsqueeze(2))
 
-    return torch.cat(row_outputs, dim=2)
+        return torch.cat(row_outputs, dim=2)
 
 
 class SincConv_fast(nn.Module):

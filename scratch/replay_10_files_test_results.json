@@ -1,0 +1,102 @@
+[
+  {
+    "filename": "PA_train_PA_T_0002477.flac",
+    "dataset": "PA",
+    "true_label": "bonafide",
+    "pred_score": 0.306,
+    "pred_label": "bonafide (valid)",
+    "status": "CORRECT",
+    "top_feature": "natural spectral flatness mean (direct bonafide speech profile)",
+    "latency_ms": 1678.37
+  },
+  {
+    "filename": "PA_train_PA_T_0001048.flac",
+    "dataset": "PA",
+    "true_label": "bonafide",
+    "pred_score": 0.4808,
+    "pred_label": "bonafide (valid)",
+    "status": "CORRECT",
+    "top_feature": "elevated spectral bandwidth std (acoustic replay signature)",
+    "latency_ms": 26.213
+  },
+  {
+    "filename": "PA_train_PA_T_0003165.flac",
+    "dataset": "PA",
+    "true_label": "bonafide",
+    "pred_score": 0.3946,
+    "pred_label": "bonafide (valid)",
+    "status": "CORRECT",
+    "top_feature": "natural spectral flatness mean (direct bonafide speech profile)",
+    "latency_ms": 18.238
+  },
+  {
+    "filename": "PA_train_PA_T_0001504.flac",
+    "dataset": "PA",
+    "true_label": "bonafide",
+    "pred_score": 0.4615,
+    "pred_label": "bonafide (valid)",
+    "status": "CORRECT",
+    "top_feature": "natural zero crossing rate mean (direct bonafide speech profile)",
+    "latency_ms": 27.554
+  },
+  {
+    "filename": "PA_train_PA_T_0001346.flac",
+    "dataset": "PA",
+    "true_label": "bonafide",
+    "pred_score": 0.3186,
+    "pred_label": "bonafide (valid)",
+    "status": "CORRECT",
+    "top_feature": "elevated spectral bandwidth std (acoustic replay signature)",
+    "latency_ms": 26.485
+  },
+  {
+    "filename": "PA_val_PA_T_0017667.flac",
+    "dataset": "PA",
+    "true_label": "spoof",
+    "pred_score": 0.6171,
+    "pred_label": "spoof (replay)",
+    "status": "CORRECT",
+    "top_feature": "elevated zero crossing rate mean (acoustic replay signature)",
+    "latency_ms": 36.415
+  },
+  {
+    "filename": "PA_train_PA_T_0046332.flac",
+    "dataset": "PA",
+    "true_label": "spoof",
+    "pred_score": 0.4321,
+    "pred_label": "bonafide (valid)",
+    "status": "MISCLASSIFIED",
+    "top_feature": "natural zero crossing rate mean (direct bonafide speech profile)",
+    "latency_ms": 27.168
+  },
+  {
+    "filename": "PA_val_PA_T_0053351.flac",
+    "dataset": "PA",
+    "true_label": "spoof",
+    "pred_score": 0.4568,
+    "pred_label": "bonafide (valid)",
+    "status": "MISCLASSIFIED",
+    "top_feature": "elevated reverb proxy decay ratio (acoustic replay signature)",
+    "latency_ms": 36.915
+  },
+  {
+    "filename": "PA_train_PA_T_0050047.flac",
+    "dataset": "PA",
+    "true_label": "spoof",
+    "pred_score": 0.4705,
+    "pred_label": "bonafide (valid)",
+    "status": "MISCLASSIFIED",
+    "top_feature": "elevated spectral flatness mean (acoustic replay signature)",
+    "latency_ms": 41.727
+  },
+  {
+    "filename": "PA_val_PA_T_0011930.flac",
+    "dataset": "PA",
+    "true_label": "spoof",
+    "pred_score": 0.5198,
+    "pred_label": "spoof (replay)",
+    "status": "CORRECT",
+    "top_feature": "elevated zero crossing rate mean (acoustic replay signature)",
+    "latency_ms": 29.224
+  }
+]
