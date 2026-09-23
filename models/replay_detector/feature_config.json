@@ -1,0 +1,55 @@
+{
+  "classifier": "sklearn.linear_model.LogisticRegression",
+  "C": 1.0,
+  "max_iter": 1000,
+  "class_weight": "balanced",
+  "random_state": 42,
+  "solver": "lbfgs",
+  "feature_count": 13,
+  "feature_names": [
+    "spectral_flatness_mean",
+    "spectral_flatness_std",
+    "spectral_rolloff_mean",
+    "spectral_rolloff_std",
+    "reverb_proxy_decay_ratio",
+    "spectral_centroid_mean",
+    "spectral_centroid_std",
+    "spectral_bandwidth_mean",
+    "spectral_bandwidth_std",
+    "zero_crossing_rate_mean",
+    "zero_crossing_rate_std",
+    "rms_energy_mean",
+    "rms_energy_std"
+  ],
+  "classes": [
+    0,
+    1
+  ],
+  "class_names": {
+    "0": "bonafide",
+    "1": "replay"
+  },
+  "intercept": 0.16089634061684188,
+  "coefficients": {
+    "spectral_flatness_mean": 0.7713512581724564,
+    "spectral_flatness_std": 0.18224358719671607,
+    "spectral_rolloff_mean": -0.6430217135277589,
+    "spectral_rolloff_std": 0.5918174455911199,
+    "reverb_proxy_decay_ratio": 0.2602575762758081,
+    "spectral_centroid_mean": 0.5085663710654539,
+    "spectral_centroid_std": -0.4064883856189495,
+    "spectral_bandwidth_mean": -0.2719224729790024,
+    "spectral_bandwidth_std": -0.6611900290287861,
+    "zero_crossing_rate_mean": 1.4481718204278273,
+    "zero_crossing_rate_std": -0.25742883358833785,
+    "rms_energy_mean": 0.06905160081882318,
+    "rms_energy_std": 0.24375266163738904
+  },
+  "validation_metrics": {
+    "accuracy": 0.5975609756097561,
+    "precision": 0.7419354838709677,
+    "recall": 0.4791666666666667,
+    "f1_score": 0.5822784810126582,
+    "roc_auc": 0.6439950980392157
+  }
+}

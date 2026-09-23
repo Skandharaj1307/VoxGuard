@@ -1,0 +1,42 @@
+{
+  "evaluation_dataset": "ASVspoof2019_PA_held_out_test",
+  "evaluation_type": "speaker_disjoint_test_split",
+  "chunk_level": {
+    "test_chunks_count": 46,
+    "bonafide_chunks": 22,
+    "replay_chunks": 24,
+    "accuracy": 0.6086956521739131,
+    "precision": 0.6363636363636364,
+    "recall": 0.5833333333333334,
+    "f1_score": 0.6086956521739131,
+    "roc_auc": 0.7102272727272727,
+    "equal_error_rate": 0.43560606060606055,
+    "eer_threshold": 0.49401666405534705,
+    "false_positive_rate": 0.36363636363636365,
+    "false_negative_rate": 0.4166666666666667,
+    "confusion_matrix": {
+      "true_negatives": 14,
+      "false_positives": 8,
+      "false_negatives": 10,
+      "true_positives": 14
+    }
+  },
+  "file_level": {
+    "test_files_count": 17,
+    "bonafide_files": 8,
+    "replay_files": 9,
+    "accuracy": 0.6470588235294118,
+    "precision": 0.6666666666666666,
+    "recall": 0.6666666666666666,
+    "f1_score": 0.6666666666666666,
+    "roc_auc": 0.736111111111111,
+    "equal_error_rate": 0.4652777777777778,
+    "eer_threshold": 0.5431998195350062,
+    "confusion_matrix": {
+      "true_negatives": 5,
+      "false_positives": 3,
+      "false_negatives": 3,
+      "true_positives": 6
+    }
+  }
+}
