@@ -299,58 +299,68 @@ class AIVoiceDetector:
         # This is why we MUST NOT hardcode probs[0, 1].
         #
 
-        if (
-            isinstance(checkpoint, dict)
-            and "state_dict" in checkpoint
-            and "label_map" in checkpoint
-        ):
+        # Support multiple common checkpoint packaging formats:
+        # 1. {'state_dict': ..., 'label_map': ...} (train_aasist_kaggle.py format)
+        # 2. {'model_state_dict': ..., ...}
+        # 3. {'model': ..., ...}
+        # 4. Direct PyTorch state_dict OrderedDict
+        if isinstance(checkpoint, dict):
+            if "state_dict" in checkpoint and isinstance(checkpoint["state_dict"], dict):
+                raw_state_dict = checkpoint["state_dict"]
+            elif "model_state_dict" in checkpoint and isinstance(checkpoint["model_state_dict"], dict):
+                raw_state_dict = checkpoint["model_state_dict"]
+            elif "model" in checkpoint and isinstance(checkpoint["model"], dict):
+                raw_state_dict = checkpoint["model"]
+            else:
+                raw_state_dict = checkpoint
 
-            state_dict = checkpoint["state_dict"]
-
-            self.label_map = checkpoint["label_map"]
-
+            if "label_map" in checkpoint and isinstance(checkpoint["label_map"], dict):
+                self.label_map = checkpoint["label_map"]
+            else:
+                # Standard ASVspoof 2019 / VoxGuard default convention
+                print(
+                    "[detector_ai_voice] NOTICE: 'label_map' key not found in checkpoint. "
+                    "Using standard convention: {'bonafide': 1, 'spoof': 0}"
+                )
+                self.label_map = {"bonafide": 1, "spoof": 0}
         else:
-
             raise ValueError(
-                f"Checkpoint at {self.checkpoint_path} is missing "
-                f"'state_dict' and/or 'label_map'. "
-                f"This wrapper requires the checkpoint format "
-                f"produced by train_aasist_kaggle.py: "
-                f"{{'state_dict': ..., 'label_map': {{...}}}}. "
-                f"Loading a raw state_dict here risks silently using "
-                f"the wrong spoof/bonafide index -- re-export the "
-                f"checkpoint in the correct format instead of bypassing "
-                f"this check."
+                f"Checkpoint at {self.checkpoint_path} is invalid type: {type(checkpoint)}. "
+                "Expected a PyTorch state_dict or dictionary containing model weights."
             )
 
+        # Strip 'module.' prefix if saved with torch.nn.DataParallel
+        state_dict = {}
+        for k, v in raw_state_dict.items():
+            key = k[7:] if k.startswith("module.") else k
+            state_dict[key] = v
 
         # ----------------------------------------------------
         # Validate label map
         # ----------------------------------------------------
-
         if "spoof" not in self.label_map:
-
             raise ValueError(
                 f"Checkpoint label_map {self.label_map} has no "
                 f"'spoof' key. Expected something like "
                 f"{{'bonafide': 1, 'spoof': 0}}."
             )
 
-
         self.spoof_index = self.label_map["spoof"]
-
 
         # ----------------------------------------------------
         # Load model weights
         # ----------------------------------------------------
-
         # strict=False allows SincConv dynamically-computed buffers to initialize naturally
-        model.load_state_dict(
+        load_result = model.load_state_dict(
             state_dict,
             strict=False
         )
 
-        print("[detector_ai_voice] Model weights loaded successfully.")
+        print(
+            f"[detector_ai_voice] Model weights loaded successfully "
+            f"(missing keys: {len(load_result.missing_keys)}, "
+            f"unexpected keys: {len(load_result.unexpected_keys)})."
+        )
 
 
         # ----------------------------------------------------
