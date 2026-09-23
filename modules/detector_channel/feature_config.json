@@ -1,0 +1,68 @@
+{
+  "feature_names": [
+    "high_freq_energy_ratio",
+    "low_freq_energy_ratio",
+    "spectral_rolloff",
+    "spectral_centroid",
+    "spectral_bandwidth",
+    "spectral_flatness",
+    "spectral_flux"
+  ],
+  "positive_class": "g711_8khz",
+  "negative_class": "clean",
+  "model_type": "RandomForestClassifier",
+  "top_feature_global": "spectral_bandwidth",
+  "feature_importances": {
+    "spectral_bandwidth": 0.415238176752012,
+    "spectral_rolloff": 0.2220333313909213,
+    "spectral_flatness": 0.13116154949301145,
+    "spectral_centroid": 0.10514256709463617,
+    "high_freq_energy_ratio": 0.09207573416543591,
+    "low_freq_energy_ratio": 0.019907550592297082,
+    "spectral_flux": 0.014441090511686048
+  },
+  "reference_stats": {
+    "high_freq_energy_ratio": {
+      "clean_mean": 0.09271363109978789,
+      "clean_std": 0.07458316807075367,
+      "g711_mean": 0.021395545892960565,
+      "g711_std": 0.02612488450842859
+    },
+    "low_freq_energy_ratio": {
+      "clean_mean": 0.5236885070427599,
+      "clean_std": 0.18340599976284425,
+      "g711_mean": 0.5452998686738522,
+      "g711_std": 0.17688028636578343
+    },
+    "spectral_rolloff": {
+      "clean_mean": 3542.962757173218,
+      "clean_std": 621.7261904931028,
+      "g711_mean": 2159.1818459362485,
+      "g711_std": 333.86028976846876
+    },
+    "spectral_centroid": {
+      "clean_mean": 1785.5335909919954,
+      "clean_std": 401.62218446166287,
+      "g711_mean": 1095.0106090859047,
+      "g711_std": 219.29866539167344
+    },
+    "spectral_bandwidth": {
+      "clean_mean": 1671.5721294748319,
+      "clean_std": 174.1641075931394,
+      "g711_mean": 1014.8678237891326,
+      "g711_std": 73.5152529181694
+    },
+    "spectral_flatness": {
+      "clean_mean": 0.05501206978534292,
+      "clean_std": 0.05126176127755149,
+      "g711_mean": 0.019754143929021285,
+      "g711_std": 0.03839674521210367
+    },
+    "spectral_flux": {
+      "clean_mean": 0.09493253525416145,
+      "clean_std": 0.021865121295421418,
+      "g711_mean": 0.10216544215158321,
+      "g711_std": 0.021157624888392585
+    }
+  }
+}
