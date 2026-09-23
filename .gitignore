@@ -10,7 +10,6 @@ __pycache__/
 # Environment variables and secrets
 .env
 
-
 # Raw datasets
 data/raw/
 data/subset_raw/
@@ -23,15 +22,19 @@ data/subset_raw.rar
 *.pth
 *.onnx
 *.pkl
+!modules/detector_channel/model.pkl
 
 # Logs
 *.log
 
 # IDE files
 .vscode/
-.idea/* . c r s w a p  
- scratch/test_run/
+.idea/
 *.crswap
+
+scratch/test_run/
+
 # Channel detector generated files
 data/channel_features.csv
 *.joblib
+!modules/detector_channel/model.joblib

@@ -1,0 +1,107 @@
+================================================================================
+VOXGUARD G.711 CHANNEL DETECTOR - MODEL SUMMARY & DETAILS
+================================================================================
+
+This document is a human-readable representation of `model.joblib`.
+Because `.joblib` is a binary machine-learning format (serialized Python bytecode),
+it cannot be opened as plain text in code editors. This file provides all internal
+parameters, features, and weights stored within `model.joblib`.
+
+--------------------------------------------------------------------------------
+1. GENERAL SPECIFICATIONS
+--------------------------------------------------------------------------------
+Model Type:              RandomForestClassifier (scikit-learn)
+Binary File:             modules/detector_channel/model.joblib
+Fallback Alias:          modules/detector_channel/model.pkl
+Feature Config:          modules/detector_channel/feature_config.json
+Total Trees (Estimators): 100
+Max Tree Depth:          6
+Number of Features:      7
+Target Classes:          [0, 1]
+  - Class 0:             "clean" (Authentic / Uncompressed audio)
+  - Class 1:             "g711_8khz" (G.711 telephone codec audio)
+
+--------------------------------------------------------------------------------
+2. HYPERPARAMETERS
+--------------------------------------------------------------------------------
+n_estimators:            100
+criterion:               gini
+max_depth:               6
+min_samples_split:       2
+min_samples_leaf:        1
+min_weight_fraction_leaf: 0.0
+max_features:            sqrt
+max_leaf_nodes:          None
+min_impurity_decrease:   0.0
+bootstrap:               True
+oob_score:               False
+n_jobs:                  -1
+random_state:            42
+verbose:                 0
+warm_start:              False
+class_weight:            None
+ccp_alpha:               0.0
+max_samples:             None
+
+--------------------------------------------------------------------------------
+3. INPUT FEATURES & FEATURE IMPORTANCES
+--------------------------------------------------------------------------------
+Rank  Feature Name             Importance  Percentage  Interpretation
+----  -----------------------  ----------  ----------  ------------------------------------------
+1     spectral_bandwidth         0.4152      41.52%    Spread of frequencies around spectral centroid.
+2     spectral_rolloff           0.2220      22.20%    Frequency below which 85% energy resides.
+3     spectral_flatness          0.1312      13.12%    Quantization noise / companding distortion.
+4     spectral_centroid          0.1051      10.51%    Center of mass of frequency spectrum.
+5     high_freq_energy_ratio     0.0921       9.21%    Energy > 3.4 kHz (drops to 0 in G.711).
+6     low_freq_energy_ratio      0.0199       1.99%    Energy < 300 Hz.
+7     spectral_flux              0.0144       1.44%    Frame-to-frame spectral difference.
+
+--------------------------------------------------------------------------------
+4. REFERENCE STATISTICS (Clean vs G.711 Baselines)
+--------------------------------------------------------------------------------
+Feature: spectral_bandwidth
+  - Clean:  mean = 1671.57 Hz, std = 174.16 Hz
+  - G.711:  mean = 1014.87 Hz, std =  73.52 Hz
+
+Feature: spectral_rolloff
+  - Clean:  mean = 3542.96 Hz, std = 621.73 Hz
+  - G.711:  mean = 2159.18 Hz, std = 333.86 Hz
+
+Feature: spectral_flatness
+  - Clean:  mean = 0.0550,     std = 0.0513
+  - G.711:  mean = 0.0198,     std = 0.0384
+
+Feature: spectral_centroid
+  - Clean:  mean = 1785.53 Hz, std = 401.62 Hz
+  - G.711:  mean = 1095.01 Hz, std = 219.30 Hz
+
+Feature: high_freq_energy_ratio
+  - Clean:  mean = 0.0927,     std = 0.0746
+  - G.711:  mean = 0.0214,     std = 0.0261
+
+Feature: low_freq_energy_ratio
+  - Clean:  mean = 0.5237,     std = 0.1834
+  - G.711:  mean = 0.5453,     std = 0.1769
+
+Feature: spectral_flux
+  - Clean:  mean = 0.0949,     std = 0.0219
+  - G.711:  mean = 0.1022,     std = 0.0212
+
+--------------------------------------------------------------------------------
+5. HOW TO READ PROGRAMMATICALLY IN PYTHON
+--------------------------------------------------------------------------------
+To load and inspect `model.joblib` directly in Python:
+
+    import joblib
+    
+    # 1. Load the model
+    model = joblib.load("modules/detector_channel/model.joblib")
+    
+    # 2. Inspect attributes
+    print("Model type:", type(model))
+    print("Classes:", model.classes_)
+    print("Feature importances:", model.feature_importances_)
+    
+    # 3. Make a prediction on a 1x7 feature vector
+    # probabilities: [p(clean), p(g711_8khz)]
+    # score = probabilities[1]
